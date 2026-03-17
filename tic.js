@@ -1,6 +1,6 @@
 function makeGameboard () {
 
-    let gameboard = [[null,null, null],["O","O","O"],["X","X", "O"]]
+    let gameboard = [[null,null, null],[null,null, null],[null,null, null]]
 
     return {
         makeMove(row,col, symbol) {
@@ -28,27 +28,32 @@ function gameState () {
 
     return {
         checkWinner (board) {
+            /* Check rows for a winner */
             for (const row of board) {
-                let countZeroes = 0;
-                let countXs = 0;
-                if (row == ["O", "O", "O"]) {
-                    
-                }
-                for (const square of row) {
-                    if (square == "O") {
-                        countZeroes += 1;
-                    }
-                    else if (square == "X") {
-                        countXs += 1;
-                    }
-                    if (countXs == 3) {
-                        return "X";
-                    }
-                    else if (countZeroes == 3) {
-                        return "O";
+                if (row[0] !== null) {
+                    if (row[0] === row[1] && row[1] === row[2]) {
+                        return row[0];
                     }
                 }
+                
             }
+             /* check columns for a winner */
+            for (let i = 0; i < 3; i++) {
+                if (board[0][i] !== null) {
+                    if (board[0][i] === board[1][i] && board[1][i] === board[2][i]) {
+                        return board[0][i];
+                    }
+                }    
+            }
+            /* check diagonals for a winner */
+            if (board[1][1] !== null) {
+                if ((board[0][0] === board[1][1] && board[1][1] === board[2][2]) || 
+                    (board[0][2] === board[1][1] && board[1][1] === board[2][0]) 
+                ) {
+                    return board[1][1];
+                  }
+             }
+            return null;
         },
     }
 
@@ -56,6 +61,10 @@ function gameState () {
 
 const board = makeGameboard();
 board.printBoard()
-board.makeMove(1, 1, "0");
+board.makeMove(0, 0, "O");
 const game = gameState();
+console.log(game.checkWinner(board.getGameboard()))
+board.makeMove(1, 0, "O");
+board.makeMove(2, 0, "O");
+board.printBoard()
 console.log(game.checkWinner(board.getGameboard()))
